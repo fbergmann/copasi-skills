@@ -1,9 +1,11 @@
 /.venv/
 /dev/
 /tmp/
+/.agents/
 /.github/skills/
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 *.egg-info/
+skills-lock.json
