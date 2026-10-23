@@ -21,7 +21,7 @@ The task skills expect the environment from `copasi-setup`. They use the Python 
 
 ### With `npx skills`
 
-Requires Node.js 22.20 or later. Replace `fbergmann` with the GitHub account hosting this repository.
+Requires Node.js 22.20 or later.
 
 ```bash
 npx skills add fbergmann/copasi-skills                              # choose skills and agents

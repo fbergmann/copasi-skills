@@ -30,11 +30,11 @@ Optional (basico keyword arguments of the same name unless noted):
 2. Load the model: `basico.load_model(model_file)`.
 3. Pass `duration = end_time - start_time`, never `end_time`.
 4. With `output_selection`, call `basico.run_time_course_with_output(output_selection, start_time=..., duration=..., intervals=..., method=...)`. Otherwise call `basico.run_time_course(start_time=..., duration=..., intervals=..., method=...)`. Forward any other given optional inputs as keyword arguments.
-5. Write `result.to_csv("simulation_results.csv", index=False)`.
+5. Call `result = result.reset_index()` when `Time` is the index, so `Time` is an explicit column, then write `result.to_csv("simulation_results.csv", index=False)`.
 6. Report the file, row count, columns, and method used.
 
 Done when all of these hold:
-- The CSV exists and is non-empty.
+- The CSV exists and is non-empty, with `Time` as its first column.
 - Rows equal `intervals + 1`, unless `values`, `stepsize`, `automatic`, or `output_event` change the output points.
 - The first `Time` is `start_time` and the last is `end_time`.
 - Every `output_selection` entry is a column.
