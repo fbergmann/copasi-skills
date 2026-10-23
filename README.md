@@ -14,6 +14,7 @@ This project hosts skills, to enable AI to run COPASI sensibly. The skills are w
 | [copasi-parameter-estimation](skills/copasi-parameter-estimation/SKILL.md) | Fitting parameters to experimental data |
 | [copasi-sensitivity](skills/copasi-sensitivity/SKILL.md) | Sensitivity of results to parameters |
 | [copasi-mca](skills/copasi-mca/SKILL.md) | Metabolic control analysis (elasticities, control coefficients) |
+| [copasi-efm](skills/copasi-efm/SKILL.md) | Elementary flux modes (minimal pathways and futile cycles) |
 | [copasi-lyapunov](skills/copasi-lyapunov/SKILL.md) | Computing and interpreting Lyapunov exponents |
 | [copasi-model-overview](skills/copasi-model-overview/SKILL.md) | Compiling model structure, COPASI task results, and plots into a linked Markdown report |
 | [copasi-model-values](skills/copasi-model-values/SKILL.md) | Inspecting and changing existing model values safely with Basico |
