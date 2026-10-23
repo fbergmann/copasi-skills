@@ -9,6 +9,7 @@ This project hosts skills, to enable AI to run COPASI sensibly. The skills are w
 | [copasi-setup](skills/copasi-setup/SKILL.md) | Creating the `.venv` with `copasi-basico` and `pandas` |
 | [copasi-timecourse](skills/copasi-timecourse/SKILL.md) | Simulating a model over time |
 | [copasi-steadystate](skills/copasi-steadystate/SKILL.md) | Computing steady states |
+| [copasi-reach-steadystate](skills/copasi-reach-steadystate/SKILL.md) | Diagnosing a model with no steady state and finding changes that give one |
 | [copasi-optimization](skills/copasi-optimization/SKILL.md) | Minimizing or maximizing a model quantity by varying parameters |
 | [copasi-parameter-estimation](skills/copasi-parameter-estimation/SKILL.md) | Fitting parameters to experimental data |
 | [copasi-sensitivity](skills/copasi-sensitivity/SKILL.md) | Sensitivity of results to parameters |
