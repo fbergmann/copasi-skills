@@ -48,6 +48,7 @@ Done when all of these hold:
 
 ## Gotchas
 
+- For direct edits to existing model values outside the optimizer, use `copasi-model-values` to resolve display names and verify the requested initial or current value.
 - Gradient-based methods (Levenberg - Marquardt, Steepest Descent, Truncated Newton) can stick in local optima. Rerun with other `start` values or a global method (Particle Swarm, Differential Evolution, SRES), then refine locally.
 - A solution on a bound means the bounds may be too tight; suggest widening them.
 - High `failed_evals_exception` or `failed_evals_nan`: tighten bounds or change start values or the subtask.

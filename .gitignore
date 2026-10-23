@@ -9,3 +9,4 @@ __pycache__/
 *.pyd
 *.egg-info/
 skills-lock.json
+.vscode/settings.json
