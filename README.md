@@ -14,8 +14,10 @@ This project hosts skills, to enable AI to run COPASI sensibly. The skills are w
 | [copasi-parameter-estimation](skills/copasi-parameter-estimation/SKILL.md) | Fitting parameters to experimental data |
 | [copasi-sensitivity](skills/copasi-sensitivity/SKILL.md) | Sensitivity of results to parameters |
 | [copasi-mca](skills/copasi-mca/SKILL.md) | Metabolic control analysis (elasticities, control coefficients) |
+| [copasi-lyapunov](skills/copasi-lyapunov/SKILL.md) | Computing and interpreting Lyapunov exponents |
 | [copasi-model-overview](skills/copasi-model-overview/SKILL.md) | Compiling model structure, COPASI task results, and plots into a linked Markdown report |
 | [copasi-model-values](skills/copasi-model-values/SKILL.md) | Inspecting and changing existing model values safely with Basico |
+| [copasi-scan](skills/copasi-scan/SKILL.md) | Configuring and running COPASI parameter scan tasks |
 
 The task skills expect the environment from `copasi-setup`. They use the Python package [`copasi-basico`](https://basico.readthedocs.io) (not `basico`), so Python 3 is required.
 
@@ -61,7 +63,9 @@ Ask in plain language and put the model file in the request. The skill is chosen
 - "Fit the rate constants in `model.cps` to `data.csv`." (`copasi-parameter-estimation`)
 - "Which parameters most influence [X] at steady state?" (`copasi-sensitivity`)
 - "Which reactions control the flux of R4?" (`copasi-mca`)
+- "Compute the Lyapunov exponents for `model.cps` and interpret the spectrum." (`copasi-lyapunov`)
 - "Set the initial value of a model parameter in `model.cps` and verify it." (`copasi-model-values`)
+- "Run the configured scan task in `model.cps` and export selected values." (`copasi-scan`)
 - "Create a linked Markdown overview of `model.cps`, including COPASI task results and plots." (`copasi-model-overview`)
 
 On the first request, the agent runs `copasi-setup` to create `.venv`. Results are written as CSV files in the working directory (e.g. `simulation_results.csv`, `steadystate_species.csv`, `optimization_results.csv`, `estimation_results.csv`, `sensitivities_scaled.csv`, `mca_flux_control.csv`).
