@@ -1,0 +1,83 @@
+## COPASI Skills
+
+This project hosts skills, to enable AI to run COPASI sensibly. The skills are written in an agnostic manner, so they will work with all AIs. As such it uses the [SKILL.md](https://skillmd.com/docs/format) format.
+
+## Available skills
+
+| Skill | Use for |
+|---|---|
+| [copasi-setup](skills/copasi-setup/SKILL.md) | Creating the `.venv` with `copasi-basico` and `pandas` |
+| [copasi-timecourse](skills/copasi-timecourse/SKILL.md) | Simulating a model over time |
+| [copasi-steadystate](skills/copasi-steadystate/SKILL.md) | Computing steady states |
+| [copasi-optimization](skills/copasi-optimization/SKILL.md) | Minimizing or maximizing a model quantity by varying parameters |
+| [copasi-parameter-estimation](skills/copasi-parameter-estimation/SKILL.md) | Fitting parameters to experimental data |
+| [copasi-sensitivity](skills/copasi-sensitivity/SKILL.md) | Sensitivity of results to parameters |
+| [copasi-mca](skills/copasi-mca/SKILL.md) | Metabolic control analysis (elasticities, control coefficients) |
+
+The task skills expect the environment from `copasi-setup`. They use the Python package [`copasi-basico`](https://basico.readthedocs.io) (not `basico`), so Python 3 is required.
+
+## Installing
+
+### With `npx skills`
+
+Requires Node.js 22.20 or later. Replace `fbergmann` with the GitHub account hosting this repository.
+
+```bash
+npx skills add fbergmann/copasi-skills                              # choose skills and agents
+npx skills add fbergmann/copasi-skills --skill copasi-steadystate   # one skill
+npx skills add fbergmann/copasi-skills -g                           # available in all projects
+npx skills update                                             # update installed skills
+```
+
+Install `copasi-setup` together with the skills that you use. Installing a single skill does not pull it in.
+
+### Manually
+
+Each skill is a folder containing a `SKILL.md`. Copy or link the folders from `skills/` into the skills directory of your tool.
+
+| Tool | Project install | Personal install |
+|---|---|---|
+| GitHub Copilot / VS Code | `.github/skills/` or `.agents/skills/` | `~/.agents/skills/` |
+| Claude Code | `.claude/skills/` | `~/.claude/skills/` |
+
+Example (PowerShell, project install for Copilot):
+
+```powershell
+Copy-Item -Recurse skills\copasi-* .github\skills\
+```
+
+Reload the tool afterwards so it picks up the new skills.
+
+## Using
+
+Ask in plain language and put the model file in the request. The skill is chosen from its description, so no command is needed.
+
+- "Simulate `model.cps` from 0 to 100 and save the trajectory." (`copasi-timecourse`)
+- "Does `model.cps` have a steady state? Give the concentrations and fluxes." (`copasi-steadystate`)
+- "Maximize flux through R3 in `model.cps` by varying k1 to k4 between 0.01 and 10." (`copasi-optimization`)
+- "Fit the rate constants in `model.cps` to `data.csv`." (`copasi-parameter-estimation`)
+- "Which parameters most influence [X] at steady state?" (`copasi-sensitivity`)
+- "Which reactions control the flux of R4?" (`copasi-mca`)
+
+On the first request, the agent runs `copasi-setup` to create `.venv`. Results are written as CSV files in the working directory (e.g. `simulation_results.csv`, `steadystate_species.csv`, `optimization_results.csv`, `estimation_results.csv`, `sensitivities_scaled.csv`, `mca_flux_control.csv`).
+
+To call a skill explicitly, name it in the request, e.g. "use copasi-steadystate on `model.cps`".
+
+
+
+
+### License
+
+This project is released under the [two clause BSD license](./LICENSE).
+
+
+### Acknowledgements
+This project has been possible thanks to [LiBiS](https://libis.bioquant.uni-heidelberg.de), the Baden-Württemberg Institute for Bioinformatics Infrastructure:
+
+![LiBiS Logo](./.graphics/libis-logo.svg)
+
+
+and to the BMBF funded [de.NBI](https://www.denbi.de) initiative (031L0104A, W-de.NBI-016)):
+
+![de.NBI logo](./.graphics/deNBI_logo.jpg)
+

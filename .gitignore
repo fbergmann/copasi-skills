@@ -1,0 +1,9 @@
+/.venv/
+/dev/
+/tmp/
+/.github/skills/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
