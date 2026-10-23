@@ -16,6 +16,7 @@ This project hosts skills, to enable AI to run COPASI sensibly. The skills are w
 | [copasi-mca](skills/copasi-mca/SKILL.md) | Metabolic control analysis (elasticities, control coefficients) |
 | [copasi-efm](skills/copasi-efm/SKILL.md) | Elementary flux modes (minimal pathways and futile cycles) |
 | [copasi-lyapunov](skills/copasi-lyapunov/SKILL.md) | Computing and interpreting Lyapunov exponents |
+| [copasi-lna](skills/copasi-lna/SKILL.md) | Linear Noise Approximation covariance and reduced matrices |
 | [copasi-model-overview](skills/copasi-model-overview/SKILL.md) | Compiling model structure, COPASI task results, and plots into a linked Markdown report |
 | [copasi-model-values](skills/copasi-model-values/SKILL.md) | Inspecting and changing existing model values safely with Basico |
 | [copasi-scan](skills/copasi-scan/SKILL.md) | Configuring and running COPASI parameter scan tasks |
@@ -65,6 +66,7 @@ Ask in plain language and put the model file in the request. The skill is chosen
 - "Which parameters most influence [X] at steady state?" (`copasi-sensitivity`)
 - "Which reactions control the flux of R4?" (`copasi-mca`)
 - "Compute the Lyapunov exponents for `model.cps` and interpret the spectrum." (`copasi-lyapunov`)
+- "Compute the Linear Noise Approximation for `model.cps` and export its covariance matrices." (`copasi-lna`)
 - "Set the initial value of a model parameter in `model.cps` and verify it." (`copasi-model-values`)
 - "Run the configured scan task in `model.cps` and export selected values." (`copasi-scan`)
 - "Create a linked Markdown overview of `model.cps`, including COPASI task results and plots." (`copasi-model-overview`)
