@@ -93,7 +93,7 @@ For value-only edits on existing objects, use `copasi-model-values`.
 ## Editing reaction kinetics
 
 1. Find suitable functions: `get_functions(suitable_for='R1')` (filter by `reversible=False/True`); filter the dataframe index with `str.contains('inhibition')` etc. Inspect one with `as_dict(df)[0]` to see `formula` and `mapping` roles (`substrate`, `product`, `modifier`, `parameter`).
-2. Assign it: `set_reaction('R1', function='Henri-Michaelis-Menten (irreversible)')`. This creates local parameters (e.g. `(R1).Km`, `(R1).V`, default 0.1).
+2. Assign it by name: `set_reaction('R1', function='Henri-Michaelis-Menten (irreversible)')`. The `function` argument is always a function name from `get_functions()` or one you declared with `add_function` (see [Custom kinetic functions](#custom-kinetic-functions)), never a formula. This creates local parameters (e.g. `(R1).Km`, `(R1).V`, default 0.1).
 3. Functions that use modifiers require the modifiers in the scheme (`'A -> B; C'`). If several modifiers exist, map explicitly:
 
 ```python
@@ -114,7 +114,33 @@ If the function/mapping is invalid, basico logs an error (`the mapping for react
 
 ## Custom kinetic functions
 
-If no built-in function fits, define one and assign it to a reaction:
+`set_reaction(function=...)` takes only the **name** of a function that already exists in the function database. It never accepts a formula. A new rate law must first be declared with `add_function`, then assigned by name, with every function symbol mapped to a role or element.
+
+Wrong (a formula passed as `function` is not a function name and fails or is ignored):
+
+```python
+set_reaction('R1', function='v * [Glucose] * [ATP] / (Km_G + [Glucose])')
+```
+
+Right:
+
+```python
+add_reaction('R1', 'Glucose + ATP -> G6P + ADP')
+add_function('hexokinase', 'V * G * T / (Km_G + G)', type='irreversible',
+             mapping={'G': 'substrate', 'T': 'substrate', 'V': 'parameter', 'Km_G': 'parameter'})
+set_reaction('R1', function='hexokinase',
+             mapping={'G': 'Glucose', 'T': 'ATP', 'V': 0.5, 'Km_G': 'global_Km'})
+```
+
+Rules:
+
+- Formula symbols in `add_function` are plain names (`G`, `V`), not `[Glucose]` or `Values[...]`. A symbol must appear in `mapping` with a role; unlisted symbols default to `parameter`.
+- Roles: `substrate`, `product`, `modifier`, `parameter`, `volume`, `time`. Give each substrate, product and modifier its own symbol; the role decides which reaction species can bind to it.
+- In `set_reaction(..., mapping=...)`, each key is a function symbol and the value is one of: a species name (for `substrate`/`product`/`modifier` symbols, which must appear in the scheme, modifiers after `;`), a global quantity name (the parameter is shared), or a number (a local parameter `(R1).V`). Unmapped parameters get local values of 0.1.
+- Create global quantities with `add_parameter` before mapping to them.
+- `type` must match the scheme: `irreversible` for `->`, `reversible` for `=`, or `general`.
+- `add_function` does nothing if the name exists, so use a new name when changing a formula, or `remove_function(name)` first (only if no reaction uses it).
+- After `set_reaction`, always read back `get_reactions()[['scheme','function','mapping']]`. A wrong function name or invalid mapping only logs `the mapping for reaction ... is not valid` and leaves the old kinetics (mass action when just created).
 
 ```python
 add_function('my_mm', 'V * S / (K + S)', type='irreversible',
@@ -122,7 +148,7 @@ add_function('my_mm', 'V * S / (K + S)', type='irreversible',
 set_reaction('R1', function='my_mm')
 ```
 
-`add_function(name, infix, type='general', mapping=None)`: `type` is `reversible`, `irreversible` or `general`; `mapping` assigns each symbol a role (`substrate`, `product`, `modifier`, `parameter`, `volume`, `time`), defaulting to `parameter`. It does nothing if a function with that name already exists. Remove with `remove_function(name)`.
+`add_function(name, infix, type='general', mapping=None)`: `type` is `reversible`, `irreversible` or `general`; `mapping` assigns each symbol a role, defaulting to `parameter`. Remove with `remove_function(name)`. Reference: https://basico.readthedocs.io/en/latest/API/basico.html#basico.model_info.add_function and https://basico.readthedocs.io/en/latest/notebooks/Editing_Kinetics.html
 
 ## Events
 
@@ -172,6 +198,7 @@ set_miriam_annotation(
 ## Gotchas
 
 - Typos in a reaction scheme silently create new species; check `get_species()`.
+- Never pass a formula to `set_reaction(function=...)`; declare it with `add_function` first, then assign it by name and map its symbols.
 - `set_*` and `add_*` calls often return nothing on failure beyond a log message; always read back.
 - Changing `scheme` or `function` can reset mapped local parameters to defaults; re-set values afterwards.
 - Species names are case sensitive; reaction parameters are addressed as `(Reaction).param`.
