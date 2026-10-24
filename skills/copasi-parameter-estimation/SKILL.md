@@ -27,7 +27,7 @@ If the `.cps` file already has estimation set up, skip steps 3 to 5 and inspect 
 
 ## Steps
 
-1. Check that the model and data files exist, every parameter has `lower < upper`, and each data set has a `Time` column.
+1. Check that the model and data files exist, every parameter has `lower < upper`, and each data set has a `Time` column. Check that every fit parameter can influence a fitted column: a parameter that only appears in a reaction of a fixed species, or that an assignment overrides, has no effect and makes the Fisher matrix singular.
 2. Load the model: `from basico import *; load_model(model_file)`.
 3. Prepare each data set as a data frame whose columns are named after the model elements they map to: `Time`, species as `[X]`, global parameters as `Values[X]`, and independent (per-experiment initial-value) columns as `[X]_0`. Call `reset_index()` so `Time` is a column. Add each with `add_experiment(name, data)`.
 4. Verify the mapping: `get_experiment_mapping(name)` must show `time`, `dependent`, and, where used, `independent` for the intended columns. For unmapped columns, fix the column names and re-add the experiment.
@@ -54,5 +54,6 @@ Done when all of these hold:
 - A solution on a bound means the bounds may be too tight; widen them and rerun.
 - Local methods can stick in local optima. Run a global method first (`Evolution Strategy (SRES)`, `Particle Swarm`), then refine with `Levenberg - Marquardt`.
 - High `failed_evals_*` or `failed_constraint_evals`: loosen the constraint bounds (a too-narrow constraint rejects valid solutions), tighten parameter bounds, or change start values.
-- Poorly identifiable parameters (hitting both bounds across runs, or large `sd`) should be flagged to the user as not determined by the data.
+- Poorly identifiable parameters (hitting both bounds across runs, or large `sd`) should be flagged to the user as not determined by the data. Run the `copasi-parameter-estimation-evaluation` skill on the result: `sd` can be NaN when the Fisher matrix is singular, and the evaluation reports bound hits, correlations, and which parameters to drop.
+- A parameter on a bound distorts later identifiability analysis; widen the bound and refit first.
 - Use `update_model=False` to keep the model's original values.

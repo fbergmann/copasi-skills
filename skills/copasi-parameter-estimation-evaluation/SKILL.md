@@ -1,6 +1,6 @@
 ---
 name: copasi-parameter-estimation-evaluation
-description: Evaluates a finished parameter estimation of a COPASI (.cps) or SBML model with copasi-basico, running the current-solution statistics with calculate statistics enabled and analysing the fit statistic, correlation matrix, and Fisher information matrix (eigenvalues, condition number). If the Fisher matrix is singular, suggests which fit parameter to drop. Use when asked whether a fit is identifiable, how well parameters are determined, or to check correlations or parameter uncertainty. Not for running the fit itself (use copasi-parameter-estimation).
+description: Evaluates a finished parameter estimation of a COPASI (.cps) or SBML model with copasi-basico, running the current-solution statistics with calculate statistics enabled and analysing the fit statistic, correlation matrix, and Fisher information matrix (eigenvalues, condition number). Flags parameters on bounds, parameters with no effect on the fit, and residual bias; if the Fisher matrix is singular, suggests which fit parameter to drop and can refit without it. Use when asked whether a fit is identifiable, how well parameters are determined, or to check correlations or parameter uncertainty. Not for running the first fit (use copasi-parameter-estimation).
 ---
 
 # Evaluating parameter estimation results
@@ -17,60 +17,52 @@ Required:
 | corr_threshold | 0.9 | Absolute correlation above which a pair is flagged |
 | cv_threshold | 50 | Coefficient of variation (%) above which a parameter is flagged |
 | condition_threshold | 1e6 | Condition number of the scaled Fisher matrix above which the fit is flagged as ill-conditioned |
-| update_model | false | Leave the stored parameter values unchanged |
+| tol | 1e-12 | Smallest eigenvalue relative to the largest below which the matrix counts as singular |
 
 ## Steps
 
-1. Load the model: `from basico import *; load_model(model_file)`. Check that `get_fit_parameters()` and `get_experiment_names()` are non-empty.
-2. Evaluate the stored solution without changing it, with statistics enabled:
-   `run_parameter_estimation(method=PE.CURRENT_SOLUTION, calculate_statistics=True)`.
-   Warnings about other tasks (scan, optimization, Lyapunov, LNA) are unrelated and can be ignored.
-3. Read the full statistic:
-   `stat = get_fit_statistic(include_parameters=True, include_experiments=True, include_fitted=True, include_validation=True)`.
-   - Global: `obj`, `rms`, `sd`, `data_points`, `valid_data_points`, `failed_evals_*`.
-   - `pd.DataFrame(stat['parameters'])`: `value`, `lower`, `upper`, `std_dev`, `coeff_of_variation`, `gradient`.
-   - `stat['experiments']` and `stat['variables']`: per-experiment and per-observable `obj`, `rms`, `error_mean`.
-   - With `n = valid_data_points` and `p = len(stat['parameters'])`: `rms = sqrt(obj/n)`, `sd = sqrt(obj/(n-p))`. Warn if `n <= p`.
-4. Check that the point is a stationary point: gradients should be near zero relative to `obj`. Flag parameters at a bound (`value` equal to `lower` or `upper`).
-5. Get the correlation matrix: `corr = get_correlation_matrix()`. List every off-diagonal pair with `abs(corr) > corr_threshold`, sorted by magnitude.
-6. Get the Fisher information matrix, scaled and unscaled:
-   `fim_s = get_fisher_information_matrix(scaled=True)`, `fim = get_fisher_information_matrix(scaled=False)`.
-   Check for NaN/inf entries and an all-zero row or column (a parameter with no effect on any fitted observable).
-7. Get the eigen-decomposition of the scaled matrix: `get_fisher_information_eigenvalues(scaled=True)` and `get_fisher_information_eigenvectors(scaled=True)`. Convert to arrays with `.iloc[:, 0].to_numpy(dtype=float)` for the eigenvalues.
-   - Condition number = `max / min` eigenvalue; `sqrt(condition)` is the uncertainty ratio between the worst and best determined directions.
-   - The eigenvector of the smallest eigenvalue shows which parameters move together in the least determined direction: the largest absolute components are the parameters involved.
-8. Optionally cross-check: `sd**2 * np.linalg.inv(fim)` should reproduce the reported `std_dev` (square root of the diagonal) and the correlation matrix.
-9. If the Fisher matrix is not invertible (see below), propose which parameter to drop. Otherwise classify the fit as well determined, weakly determined (flagged correlations, CV above `cv_threshold`, or condition number above `condition_threshold`), or non-identifiable.
-10. Save tables to CSV: `fit_parameters.csv`, `correlation.csv`, `fisher_scaled.csv`, `fisher_unscaled.csv`, `fisher_eigen.csv`.
-11. Report: `obj`, `rms`, `sd`, the parameter table, flagged correlations, eigenvalues and condition number, the weakest direction, and any parameter drop recommendation.
+1. Run `scripts/evaluate_fit.py <model_file> [--out DIR] [--corr 0.9] [--cv 50] [--cond 1e6]` with the venv Python. It loads the model, runs `run_parameter_estimation(method=PE.CURRENT_SOLUTION, calculate_statistics=True)` (the stored values are not changed), and writes `fit_parameters.csv`, `experiments.csv`, `observables.csv`, `correlation.csv`, `fisher_scaled.csv`, `fisher_unscaled.csv`, `fisher_eigen.csv`, and `summary.json` to `DIR` (default `eval_<model name>` next to the model). Warnings from unrelated tasks (scan, optimization, LNA) are suppressed.
+2. Read the printed report and `summary.json`:
+   - `obj`, `rms`, `sd`, `n`, `p`. Warn if `n <= p`. `rms = sqrt(obj/n)`, `sd = sqrt(obj/(n-p))`.
+   - Per parameter: `value`, bounds, `std_dev`, `coeff_of_variation`, `gradient`, `on_bound`.
+   - Fisher: `rank` against `p`, `condition`, `verdict` (`ok`, `ill-conditioned`, `singular`), `weak_directions` (eigenvectors of the three smallest eigenvalues, components above 0.3), `high_corr` pairs, `zero_rows`, `on_bound`, `high_cv`, `drop_suggestions`.
+3. Check the point is stationary: gradients near zero relative to `obj`. Large gradients mean the fit has not converged; refit before interpreting the matrices.
+4. Check bound hits: a parameter on a bound distorts the Fisher analysis. Widen the bound and refit before calling it non-identifiable, and report if it still runs to the bound.
+5. Check residual bias in `experiments.csv` and `observables.csv`: `error_mean` large relative to `rms`, or the same sign across an experiment, indicates a systematic misfit and probably model-structure error, not a parameter problem. Report it.
+6. Classify: well determined, weakly determined (flagged correlations, CV above `cv_threshold`, or condition above `condition_threshold`), or non-identifiable (singular).
+7. If the verdict is not `ok`, run the loop below. Otherwise report and finish.
+8. Report: fit quality, the parameter table, flagged correlations, weakest directions, bound hits, residual bias, drop recommendations, and the files written.
 
-## Fisher matrix not invertible
+## Making the fit identifiable
 
-Treat the matrix as not invertible when any of these hold: `std_dev` or the matrix contains NaN/inf, `np.linalg.inv` raises `LinAlgError`, the smallest scaled eigenvalue is `<= 1e-12 * largest` (or is non-positive), or `np.linalg.matrix_rank(fim_s) < p`.
+Present the drop candidates with their evidence and let the user choose before changing the fit. Then:
 
-Choose the parameter(s) to drop in this order:
-1. A parameter whose scaled Fisher row/column is all zero (or near zero): it has no effect on the fitted data. Drop it.
-2. Otherwise, take the eigenvector of the smallest eigenvalue. Among its components with `abs > 0.3`, those are the parameters that form the non-identifiable combination. Among them, drop the one that:
-   - has the largest `coeff_of_variation`, or `std_dev` NaN/inf, or sits on a bound; and
-   - is least biologically or structurally important (e.g. a rate constant redundant with another, a parameter that only appears as a product or ratio with another).
-   Fix it at its current value (or at a literature value).
-3. For a pair with `abs(corr)` near 1 (e.g. `k1` and `k2` appearing only as `k1*k2` or `k1/k2`), drop one of the pair, or reparametrize as the identifiable combination.
-4. After dropping, remove the item from the fit (`set_fit_parameters` with the remaining items), rerun the estimation (`copasi-parameter-estimation`), and repeat this evaluation. If the rank deficiency is larger than one, repeat the elimination for each remaining small eigenvalue.
+1. `scripts/refit_without.py <model_file> <new_file.cps> --drop "Values[a],Values[b]" [--bound "Values[c]:lower:upper"] [--global-method none]` removes the fit items, optionally changes bounds, refits with `Evolution Strategy (SRES)` then `Levenberg - Marquardt`, and saves a new model. The input is never overwritten. The dropped parameters keep their stored values.
+2. Run `evaluate_fit.py` on the new model.
+3. Repeat until the verdict is `ok`, no pair exceeds `|corr| > 0.99`, and no parameter is on a bound, or until the user stops. Keep a table per iteration of `obj`, `p`, rank, condition, and the determined parameters. The objective should barely change when you drop a parameter the data do not constrain; a clear increase means the dropped parameter mattered.
 
-State clearly that a drop is a suggestion; list the candidates with the evidence (eigenvector components, CV, correlation) so the user can choose.
+Choosing what to drop, in this order:
+1. A parameter with an all-zero Fisher row and gradient exactly 0: it has no effect on any fitted observable (for example it only appears in a reaction whose substrate is a fixed species, or it is overridden by an assignment). Drop it.
+2. Otherwise, take the eigenvector of the smallest eigenvalue. Among its components with `abs > 0.3`, drop the one that is on a bound or has the largest `coeff_of_variation`, and is least important structurally. Fix it at its current value or a literature value.
+3. For a pair with `abs(corr)` near 1 (for example parameters that appear only as a product or ratio), drop one of the pair or reparametrize as the identifiable combination. Which member to fix is arbitrary; say so.
+
+## Failure handling
+
+The matrix counts as singular when it contains NaN/inf, `np.linalg.matrix_rank` is below `p`, or the smallest scaled eigenvalue is at most `tol` times the largest (or negative). In that case `std_dev` and the correlation matrix are NaN, so use the Fisher matrix, its eigen-decomposition, and the gradients instead.
 
 Done when all of these hold:
-- `run_parameter_estimation(method=PE.CURRENT_SOLUTION, calculate_statistics=True)` completed and `get_fit_statistic` returned parameter entries.
-- Correlation matrix, Fisher matrices, and eigenvalues were retrieved (or the failure was reported).
-- The CSV files exist and are non-empty.
-- The report states the identifiability verdict and, if singular, a named parameter to drop.
+- `evaluate_fit.py` completed and `summary.json` exists.
+- The report states the verdict, bound hits, residual bias, and, if not `ok`, named parameters to drop.
+- If refits were done, the per-iteration table and the new model files are listed, and the original model is unchanged.
 
 ## Gotchas
 
-- `PE.CURRENT_SOLUTION` leaves the parameter values unchanged; it does not refit. Do not use another method here.
+- `PE.CURRENT_SOLUTION` leaves the parameter values unchanged; it does not refit. Use `refit_without.py` to refit.
 - `calculate_statistics` must be true or the matrices and `std_dev` are not populated.
-- Use the scaled Fisher matrix to compare parameters of different magnitude; use the unscaled one to recover standard deviations.
-- Standard deviations and correlations are a local quadratic approximation. When a correlation is about ±1 or an eigenvalue is orders of magnitude below the rest, the parameters are practically non-identifiable; recommend a profile likelihood (https://basico.readthedocs.io/en/latest/notebooks/Profile_likelihood.html) for a global view.
+- Parameter names in the fit statistic carry `.InitialValue` (`Values[K_s].InitialValue`), while `get_fit_parameters()` uses `Values[K_s]`. The scripts normalize this; do the same in your own code.
+- In the fit statistic the bounds are CN objects; convert with `float(str(x))`.
+- Use the scaled Fisher matrix to compare parameters of different magnitude; use the unscaled one to recover standard deviations (`covariance = sd**2 * inv(F)`).
+- Standard deviations and correlations are a local quadratic approximation. When a correlation is about ±1 or an eigenvalue is orders of magnitude below the rest, the parameters are practically non-identifiable; recommend a profile likelihood (https://basico.readthedocs.io/en/latest/notebooks/Profile_likelihood.html).
 - Mean-square weighting has no separate measurement-error column, so `sd` is the residual scale, not a chi-square test against known measurement variance.
-- Parameters appearing only through a product or ratio are structurally non-identifiable regardless of data quality; reparametrize instead of refitting.
-- Eigenvalue and eigenvector rows are matched by index; the eigenvector columns are named after the fit parameters.
+- Fixing a parameter at its refit value is only exploratory. A literature value is better.
+- COPASI messages from other tasks go to stderr, which makes PowerShell report exit code 1. The scripts suppress them; in your own scripts redirect stderr.
