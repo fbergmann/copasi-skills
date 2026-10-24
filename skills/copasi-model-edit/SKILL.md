@@ -37,12 +37,13 @@ Or edit an existing one with `load_model(path)`. `new_model` replaces the curren
 
 `add_reaction(name, scheme, **set_reaction_kwargs)` creates the reaction and automatically assigns mass action kinetics to it (irreversible or reversible mass action, matching the scheme), with local parameters `(R1).k1 = 0.1` (and `k2` for reversible); no `function` argument is needed for mass action. Species in the scheme that do not exist yet are created automatically (initial concentration 1, in the first compartment, or in a new unit compartment named `compartment` if the model has none). It accepts the same kwargs as `set_reaction` (`function`, `mapping`, `notes`), so kinetics can be given at creation.
 
-To control species placement or initial values, create species first with `add_compartment` / `add_species` (below), then add reactions.
+Build models reaction-first: do not call `add_species` or `add_compartment` before `add_reaction`. Write the reactions; every species in the schemes (and the default compartment) is created automatically. Afterwards, only if a species needs a non-default initial concentration, type (`fixed`, `assignment`), or a different compartment, change it with `set_species(name, initial_concentration=..., type=...)`. Create species or compartments first only when species must be placed in a compartment other than the first, or when a species is in no reaction.
 
 ```python
-add_reaction('R1', 'A -> B')
+add_reaction('R1', 'A -> B')           # creates A and B automatically
 add_reaction('R2', 'B = C')            # '=' reversible, '->' irreversible
 add_reaction('R3', 'A -> B; C D')      # text after ';' lists modifiers, space separated
+set_species('A', initial_concentration=10)   # adjust afterwards if needed
 ```
 
 Inspect: `get_reactions()` (columns `scheme`, `function`, `mapping`), `get_reaction_parameters()`, `get_species()`.
@@ -191,9 +192,10 @@ set_miriam_annotation(
 ## Workflow
 
 1. Load or create the model; inspect it first (`overview()`, `get_species()`, `get_reactions()`, `get_parameters()`, `get_events()`).
-2. Apply edits in small steps; after each, read back the relevant table.
-3. Sanity check with a short `run_time_course(duration=...)` (and `get_species()` for unexpected auto-created species from typos in schemes).
-4. Save only when requested, to a new path; reload and re-verify.
+2. Add reactions first (species appear automatically), then set initial values and types with `set_species`; add global parameters and events after that.
+3. Apply edits in small steps; after each, read back the relevant table.
+4. Sanity check with a short `run_time_course(duration=...)` (and `get_species()` for unexpected auto-created species from typos in schemes).
+5. Save only when requested, to a new path; reload and re-verify.
 
 ## Gotchas
 
