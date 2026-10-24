@@ -35,7 +35,7 @@ Or edit an existing one with `load_model(path)`. `new_model` replaces the curren
 
 ## Reactions
 
-`add_reaction(name, scheme, **set_reaction_kwargs)` creates the reaction. Species in the scheme that do not exist yet are created automatically (initial concentration 1, in the first compartment, or in a new unit compartment named `compartment` if the model has none). Kinetics default to mass action with local parameters `(R1).k1 = 0.1`. It accepts the same kwargs as `set_reaction` (`function`, `mapping`, `notes`), so kinetics can be given at creation.
+`add_reaction(name, scheme, **set_reaction_kwargs)` creates the reaction and automatically assigns mass action kinetics to it (irreversible or reversible mass action, matching the scheme), with local parameters `(R1).k1 = 0.1` (and `k2` for reversible); no `function` argument is needed for mass action. Species in the scheme that do not exist yet are created automatically (initial concentration 1, in the first compartment, or in a new unit compartment named `compartment` if the model has none). It accepts the same kwargs as `set_reaction` (`function`, `mapping`, `notes`), so kinetics can be given at creation.
 
 To control species placement or initial values, create species first with `add_compartment` / `add_species` (below), then add reactions.
 
@@ -54,12 +54,13 @@ Modify with `set_reaction(name, scheme=..., function=..., mapping=..., new_name=
 Signatures (all accept `model=` to target a specific data model; each `add_*` also accepts every kwarg of the matching `set_*`):
 
 - `add_compartment(name, initial_size=1.0, **set_compartment_kwargs)`
-- `add_species(name, compartment_name='', initial_concentration=1.0, **set_species_kwargs)`; empty `compartment_name` means the first compartment (a unit `compartment` is created if none exists)
+- `add_species(name, compartment_name='', initial_concentration=1.0, **set_species_kwargs)`; `compartment_name` is optional: when omitted, the species is placed in the first compartment of the model (a unit `compartment` is created if none exists). Pass it only to use a different compartment.
 - `add_parameter(name, initial_value=1.0, **set_parameters_kwargs)`
 
 ```python
 add_compartment('cell', initial_size=2.0)
 add_species('A', compartment_name='cell', initial_concentration=10)
+add_species('B')                                   # no compartment_name: goes into the first compartment
 add_parameter('global_k', initial_value=0.2)       # global quantity, type 'fixed' by default
 ```
 
