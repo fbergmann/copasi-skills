@@ -9,6 +9,8 @@ Requires the `.venv` from `copasi-setup`. Needs network access to BioModels and 
 
 BioModels is the default database. Use JWS Online when the user names JWS, a JWS slug, or a species or reaction known from that collection.
 
+Consider Flux Balance Models, models mentioning COBRA, or FBC out of scope unless otherwise stated.
+
 ## BioModels
 
 ```python

@@ -1,6 +1,7 @@
 /.venv/
 /dev/
 /tmp/
+/models/
 /.agents/
 /.github/skills/
 __pycache__/
