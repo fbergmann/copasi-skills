@@ -39,6 +39,52 @@ npx skills update                                             # update installed
 
 Install `copasi-setup` together with the skills that you use. Installing a single skill does not pull it in.
 
+
+### Antigravity
+
+Note that the above step didn't work for antigravity. There you'd additionally: 
+
+ - Register via Global skills.json (Recommended)
+
+Antigravity supports global JSON manifests to explicitly load skills stored in custom locations.
+
+Open or create the global configuration file:
+
+    * Windows: %USERPROFILE%\.gemini\config\skills.json
+    * macOS / Linux: ~/.gemini/config/skills.json
+
+Add ~/.agents/skills to the entries list:
+
+```json
+{
+  "entries": [
+    {
+      "path": "~/.agents/skills"
+    }
+  ]
+}
+```
+
+Antigravity automatically resolves ~/ to your home directory and scans each subdirectory inside ~/.agents/skills one level deep.
+
+Alternatively, you can link `~/.agents/skills` into the standard global discovery directory:
+
+Windows:
+
+```bat
+mkdir "%USERPROFILE%\.gemini\config"
+mklink /J "%USERPROFILE%\.gemini\config\skills" "%USERPROFILE%\.agents\skills"
+``
+
+macOS / Linux:
+
+```bash
+mkdir -p ~/.gemini/config
+ln -s ~/.agents/skills ~/.gemini/config/skills
+```
+
+then create a new conversation in antigravity and copasi setup should work. 
+
 ### Manually
 
 Each skill is a folder containing a `SKILL.md`. Copy or link the folders from `skills/` into the skills directory of your tool.
