@@ -20,6 +20,7 @@ This project hosts skills, to enable AI to run COPASI sensibly. The skills are w
 | [copasi-model-overview](skills/copasi-model-overview/SKILL.md) | Compiling model structure, COPASI task results, and plots into a linked Markdown report |
 | [copasi-model-values](skills/copasi-model-values/SKILL.md) | Inspecting and changing existing model values safely with Basico |
 | [copasi-model-edit](skills/copasi-model-edit/SKILL.md) | Creating models and editing reactions, kinetics, events, and annotations |
+| [copasi-model-search](skills/copasi-model-search/SKILL.md) | Searching BioModels and JWS Online and loading a published model |
 | [copasi-scan](skills/copasi-scan/SKILL.md) | Configuring and running COPASI parameter scan tasks |
 
 The task skills expect the environment from `copasi-setup`. They use the Python package [`copasi-basico`](https://basico.readthedocs.io) (not `basico`), so Python 3 is required.
@@ -118,6 +119,7 @@ Ask in plain language and put the model file in the request. The skill is chosen
 - "Compute the Linear Noise Approximation for `model.cps` and export its covariance matrices." (`copasi-lna`)
 - "Set the initial value of a model parameter in `model.cps` and verify it." (`copasi-model-values`)
 - "Create a model with the reaction A -> B using Michaelis-Menten kinetics and add an event at time 30 that sets the concentration of A to 2." (`copasi-model-edit`)
+- "Find a curated SBML model of glycolytic oscillations and load it." (`copasi-model-search`)
 - "Run the configured scan task in `model.cps` and export selected values." (`copasi-scan`)
 - "Create a linked Markdown overview of `model.cps`, including COPASI task results and plots." (`copasi-model-overview`)
 
