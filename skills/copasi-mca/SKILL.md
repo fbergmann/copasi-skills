@@ -2,6 +2,10 @@
 name: copasi-mca
 description: Runs metabolic control analysis of an SBML (.xml/.sbml) or COPASI (.cps) model with copasi-basico, giving elasticities and concentration and flux control coefficients at steady state. Use when asked which reactions control a flux or concentration, or for control coefficients or elasticities. Not for sensitivities to parameters (use copasi-sensitivity).
 license: BSD-2-Clause
+compatibility: Requires Python 3.10+
+metadata:
+  author: "Frank T. Bergmann"
+  version: "1.0"
 ---
 
 # Metabolic control analysis of an SBML / COPASI model

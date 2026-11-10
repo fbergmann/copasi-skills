@@ -2,6 +2,10 @@
 name: copasi-parameter-estimation-evaluation
 description: Evaluates a finished parameter estimation of a COPASI (.cps) or SBML model with copasi-basico, running the current-solution statistics with calculate statistics enabled and analysing the fit statistic, correlation matrix, and Fisher information matrix (eigenvalues, condition number). Flags parameters on bounds, parameters with no effect on the fit, and residual bias; if the Fisher matrix is singular, suggests which fit parameter to drop and can refit without it. Use when asked whether a fit is identifiable, how well parameters are determined, or to check correlations or parameter uncertainty. Not for running the first fit (use copasi-parameter-estimation).
 license: BSD-2-Clause
+compatibility: Requires Python 3.10+
+metadata:
+  author: "Frank T. Bergmann"
+  version: "1.0"
 ---
 
 # Evaluating parameter estimation results

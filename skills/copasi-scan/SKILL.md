@@ -2,6 +2,10 @@
 name: copasi-scan
 description: Inspects, configures, and runs the COPASI Parameter Scan task in an SBML (.xml/.sbml) or COPASI (.cps) model with copasi-basico. Use when asked to scan model elements over ranges or explicit values, repeat a COPASI subtask, sample values from a distribution, or run a configured scan task. Not for parameter optimization or fitting.
 license: BSD-2-Clause
+compatibility: Requires Python 3.10+
+metadata:
+  author: "Frank T. Bergmann"
+  version: "1.0"
 ---
 
 # COPASI parameter scans

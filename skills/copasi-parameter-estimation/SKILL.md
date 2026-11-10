@@ -2,6 +2,10 @@
 name: copasi-parameter-estimation
 description: Fits parameters of an SBML (.xml/.sbml) or COPASI (.cps) model to experimental data with copasi-basico, using time-course or steady-state data, multiple experiments, and optional constraints. Use when asked to estimate, fit, or calibrate parameters against measured data. Not for optimizing an objective without data (use copasi-optimization).
 license: BSD-2-Clause
+compatibility: Requires Python 3.10+
+metadata:
+  author: "Frank T. Bergmann"
+  version: "1.0"
 ---
 
 # Parameter estimation of an SBML / COPASI model

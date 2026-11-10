@@ -2,6 +2,10 @@
 name: copasi-optimization
 description: Optimizes parameters of an SBML (.xml/.sbml) or COPASI (.cps) model with copasi-basico, minimizing or maximizing an objective by varying parameters within bounds, with optional constraints. Use when asked to minimize, maximize, or fit model quantities. Not for plain simulation or steady state.
 license: BSD-2-Clause
+compatibility: Requires Python 3.10+
+metadata:
+  author: "Frank T. Bergmann"
+  version: "1.0"
 ---
 
 # Parameter optimization of an SBML / COPASI model

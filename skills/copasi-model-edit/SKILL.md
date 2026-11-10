@@ -2,6 +2,10 @@
 name: copasi-model-edit
 description: Creates or structurally modifies an SBML (.xml/.sbml) or COPASI (.cps) model with copasi-basico, adding species, reactions, kinetic functions, global parameters, events, and notes/MIRIAM annotations. Use when asked to build a new model, add or change reactions, change rate laws, add events, or annotate a model. Not for only changing existing values (use copasi-model-values), nor for running analyses.
 license: BSD-2-Clause
+compatibility: Requires Python 3.10+
+metadata:
+  author: "Frank T. Bergmann"
+  version: "1.0"
 ---
 
 # Creating and editing COPASI models

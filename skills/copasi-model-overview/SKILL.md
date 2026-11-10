@@ -2,6 +2,10 @@
 name: copasi-model-overview
 description: Compile a COPASI (.cps) or SBML model overview by inspecting the model and running its configured time-course, steady-state, metabolic-control, and parameter-estimation tasks. Use when the user asks for a model overview, behavior report, comprehensive COPASI analysis, or a Markdown report with plots and result statistics.
 license: BSD-2-Clause
+compatibility: Requires Python 3.10+
+metadata:
+  author: "Frank T. Bergmann"
+  version: "1.0"
 ---
 
 # COPASI model overview

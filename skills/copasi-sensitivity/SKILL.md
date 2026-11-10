@@ -2,6 +2,10 @@
 name: copasi-sensitivity
 description: Runs a sensitivity analysis of an SBML (.xml/.sbml) or COPASI (.cps) model with copasi-basico, reporting how chosen effects (concentrations, fluxes, steady state, time series) respond to parameter or initial-value changes, scaled and unscaled. Use when asked which parameters most influence a result, or for sensitivities or control coefficients. Not for fitting or simulation.
 license: BSD-2-Clause
+compatibility: Requires Python 3.10+
+metadata:
+  author: "Frank T. Bergmann"
+  version: "1.0"
 ---
 
 # Sensitivity analysis of an SBML / COPASI model

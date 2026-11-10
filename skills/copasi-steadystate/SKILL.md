@@ -2,6 +2,10 @@
 name: copasi-steadystate
 description: Computes the steady state (equilibrium, fixed point) of an SBML (.xml/.sbml) or COPASI (.cps) model with copasi-basico and exports concentrations, fluxes, and optionally the Jacobian. Use when asked for steady-state values or whether a model has one. Not for trajectories or parameter fitting.
 license: BSD-2-Clause
+compatibility: Requires Python 3.10+
+metadata:
+  author: "Frank T. Bergmann"
+  version: "1.0"
 ---
 
 # Steady state of an SBML / COPASI model

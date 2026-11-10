@@ -2,6 +2,10 @@
 name: copasi-lna
 description: Computes the Linear Noise Approximation (LNA) for an SBML (.xml/.sbml) or COPASI (.cps) model with copasi-basico, returning covariance and reduced matrices for fluctuations around a steady state. Use when asked for linear-noise approximation, intrinsic fluctuation covariance, or LNA matrices. Not for stochastic trajectories, parameter sensitivities, or metabolic control analysis.
 license: BSD-2-Clause
+compatibility: Requires Python 3.10+
+metadata:
+  author: "Frank T. Bergmann"
+  version: "1.0"
 ---
 
 # Linear Noise Approximation for an SBML / COPASI model

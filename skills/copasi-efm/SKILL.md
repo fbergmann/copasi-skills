@@ -2,6 +2,10 @@
 name: copasi-efm
 description: Computes the elementary flux modes of an SBML (.xml/.sbml) or COPASI (.cps) model with copasi-basico, giving each minimal steady-state reaction set with its coefficients, reversibility, net conversion, and balanced internal species. Use when asked for elementary modes, minimal pathways, futile cycles, or which reaction combinations can carry a steady-state flux. Not for computing a steady state (use copasi-steadystate).
 license: BSD-2-Clause
+compatibility: Requires Python 3.10+
+metadata:
+  author: "Frank T. Bergmann"
+  version: "1.0"
 ---
 
 # Elementary flux modes of an SBML / COPASI model
