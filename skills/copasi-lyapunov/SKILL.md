@@ -1,6 +1,7 @@
 ---
 name: copasi-lyapunov
 description: Computes Lyapunov exponents for an SBML (.xml/.sbml) or COPASI (.cps) model using Basico's COPASI Lyapunov Exponents task. Use when asked about trajectory divergence, convergence, neutral directions, or possible chaotic dynamics. Not for time-course plots, steady-state values, sensitivities, or metabolic control analysis.
+license: BSD-2-Clause
 ---
 
 # Computing Lyapunov exponents

@@ -1,6 +1,7 @@
 ---
 name: copasi-timecourse
 description: Simulates the time course of an SBML (.xml/.sbml) or COPASI (.cps) model with copasi-basico, deterministic or stochastic, and exports the trajectory to CSV. Use when asked to simulate, run, or get dynamics of species, parameters, fluxes, or rates over time. Not for steady state or parameter fitting.
+license: BSD-2-Clause
 ---
 
 # Time course of an SBML / COPASI model

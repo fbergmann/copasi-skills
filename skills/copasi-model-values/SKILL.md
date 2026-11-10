@@ -1,6 +1,7 @@
 ---
 name: copasi-model-values
 description: Inspects or changes existing values in an SBML (.xml/.sbml) or COPASI (.cps) model with copasi-basico. Use when reading or setting initial or current values of global quantities, species, or compartments. Not for structural model edits, simulation, steady-state analysis, fitting, optimization, parameter sweeps, or evaluating objective functions.
+license: BSD-2-Clause
 ---
 
 # Inspecting and changing COPASI model values

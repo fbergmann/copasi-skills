@@ -1,6 +1,7 @@
 ---
 name: copasi-reach-steadystate
 description: Diagnoses why an SBML (.xml/.sbml) or COPASI (.cps) model has no steady state and finds the smallest parameter or structural changes that give one, with copasi-basico. Use when run_steadystate fails (status 0), species grow without bound or deplete, or the user asks how to make a model reach steady state. Not for models that already have one (use copasi-steadystate).
+license: BSD-2-Clause
 ---
 
 # Bring a model to steady state

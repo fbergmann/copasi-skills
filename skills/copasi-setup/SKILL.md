@@ -1,6 +1,7 @@
 ---
 name: copasi-setup
 description: Creates the Python virtual environment with copasi-basico for COPASI/SBML work. Use before any copasi-timecourse, copasi-steadystate, or copasi-optimization run when `.venv` is missing or `import basico` fails.
+license: BSD-2-Clause
 ---
 
 # COPASI environment setup

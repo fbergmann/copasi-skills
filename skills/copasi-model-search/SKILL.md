@@ -1,6 +1,7 @@
 ---
 name: copasi-model-search
 description: Searches BioModels and JWS Online for published models with copasi-basico, building each BioModels call to search_for_model in the BioModels search syntax, then loads a chosen SBML model. Use when asked to find, search, or download an existing published model, a BioModels or biomodel id, a curated or non-curated model, or a JWS Online model. Not for editing a local model or running an analysis.
+license: BSD-2-Clause
 ---
 
 # Searching published models
