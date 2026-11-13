@@ -11,3 +11,5 @@ __pycache__/
 *.egg-info/
 skills-lock.json
 .vscode/settings.json
+paper/jats/paper.jats
+paper/paper.pdf
