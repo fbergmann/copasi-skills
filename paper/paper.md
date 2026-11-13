@@ -10,6 +10,9 @@ authors:
   - name: Frank T. Bergmann
     orcid: 0000-0001-5553-4702
     affiliation: "1"
+  - name: Sven Sahle
+    orcid: 0000-0002-5458-7404
+    affiliation: "1"
 affiliations:
   - name: BioQUANT / Heidelberg University, INF 267, Heidelberg, Germany
     index: 1
@@ -19,7 +22,7 @@ bibliography: paper.bib
 
 # Summary
 
-Biochemical models represent biological systems as networks of reactions that describe the production, consumption, and transformation of molecular species over time. These models provide a quantitative framework for analyzing system dynamics and enable computational experiments that complement traditional wet-lab approaches, helping researchers gain mechanistic insight and make predictive assessments of biological behavior. COPASI is a widely used program for simulating and analyzing those models. These tasks are made availabe to Python through Basico. COPASI Skills is a set of instruction files that tell an assistant how to drive Basico for one analysis at a time. Each skill is a directory containing a `SKILL.md` file. A short description at the top tells the assistant when the skill applies, and the rest of the file states which calls to make, which files to write, and which neighboring skill to choose instead. A researcher can ask for example, in ordinary language, for a time course, a fit, or a published model. The assistant follows the matching skill and leaves tables or a report next to the model. The collection is released under a two-clause BSD license from [https://github.com/fbergmann/copasi-skills](https://github.com/fbergmann/copasi-skills).
+Biochemical models represent biological systems as networks of reactions that describe the production, consumption, and transformation of molecular species over time. These models provide a quantitative framework for analyzing system dynamics and enable computational experiments that complement traditional wet-lab approaches, helping researchers gain mechanistic insight and make predictive assessments of biological behavior. COPASI is a widely used program for simulating and analyzing those models. These tasks are made availabe to Python through Basico. COPASI Skills is a set of instruction files that tell an assistant how to drive Basico for one analysis at a time. Each skill is a directory containing a `SKILL.md` file. A short description at the top tells the assistant when the skill applies, and the rest of the file states which calls to make, which files to write, and which potential neighboring skill to choose additionally. A researcher can ask for example, in ordinary language, for a time course, a fit, or a published model. The assistant follows the matching skill and leaves tables or a report next to the model. The collection is released under a two-clause BSD license from [https://github.com/fbergmann/copasi-skills](https://github.com/fbergmann/copasi-skills).
 
 # Statement of need
 
@@ -27,7 +30,7 @@ The COmplex PAthway SImulator [`COPASI`; @hoops2006copasi; @bergmann_2017] simul
 
 That procedure now has a shared file format. In October 2025, Anthropic described Agent Skills as directories whose `SKILL.md` file begins with a name and a description [@anthropic2025skills]. The assistant loads those two fields for every installed skill and loads the instructions only when a request matches the description. Anthropic argues that the same pattern suits scientific protocols, because a skill can make an assistant follow a stated procedure, and it demonstrated a skill for quality control of single-cell RNA sequencing data [@anthropic2025lifesciences]. The format is now an open specification. The specification requires the description to say both what the skill does and when to use it, and it treats further files as material to be read only when the instructions ask for them [@agentskills2026]. Scientific skill collections have since packaged that layout for other research software and databases [@kdense2026skills]. However, it does not encode the functionality COPASI provides. 
 
-This contribution is a COPASI-specific set of skills encoded in the Agent Skills format. Each description names the question it answers and the skill that should be used instead, so a fit to measurements is not treated as an optimization without data, a request for control coefficients is not treated as a parameter sensitivity, and a model with no steady state is handed to a diagnostic skill.
+This contribution is a COPASI-specific set of skills encoded in the Agent Skills format. Each description names the question it answers and potentially when not to use it, a request for control coefficients is not treated as a parameter sensitivity, and a model with no steady state is handed to a diagnostic skill.
 
 Anyone can write a `SKILL.md` file that drives COPASI. This collection is published and reviewed by the COPASI authors rather than from an unreviewed prompt. We invite further skills, and invite contributions whenever the present skills fail, so that the procedures can be improved.
 
@@ -72,7 +75,7 @@ This project is intended for systems biologists, students and instructors using 
 
 The results still have to be checked. COPASI Skills is there to help a modeler's own analysis and to offer suggestions along the way. It is not there so that the thinking can be handed to the assistant. The person who asked for the analysis remains responsible for deciding whether a table, a fit, or a suggested change is meaningful.
 
-Of course, the other consumer is the assistant. The instructions do not depend on one vendor's tool protocol. They simply say which Basico functions to run and which files to write, so any host (like GitHub Copilot, Claude Code, Cursor) that reads the Agent Skills format can load these skills.
+Of course, the other target is the assistant. The instructions do not depend on one vendor's tool protocol. They simply say which Basico functions to run and which files to write, so any host (like GitHub Copilot, Claude Code, Cursor) that reads the Agent Skills format can load these skills.
 
 # AI usage disclosure
 
