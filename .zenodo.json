@@ -1,0 +1,28 @@
+{
+    "upload_type": "software",
+    "title": "COPASI Skills: Agent Skills for COPASI analyses through Basico",
+    "creators": [
+      {
+        "orcid": "0000-0001-5553-4702",
+        "affiliation": "Heidelberg University, BioQUANT/COS, Heidelberg, Germany",
+        "name": "Bergmann, Frank T."
+      }
+    ],
+     "contributors": [
+       {
+        "orcid": "0000-0002-5458-7404",
+        "affiliation": "Heidelberg University, BioQUANT/COS, Heidelberg, Germany",
+        "name": "Sahle, Sven",
+        "type": "Researcher"
+       }
+     ],
+    "description": "<p>COPASI Skills is a collection of Agent Skills for COPASI analyses through Basico.</p>\n<p>&nbsp;</p>\n<h2>Funding</h2>\n<p>Frank Bergmann is supported by&nbsp;<a href=\"https://libis.bioquant.uni-heidelberg.de/\" rel=\"nofollow\">LiBiS</a>, the Baden-W&uuml;rttemberg Institute for Bioinformatics Infrastructure:&nbsp; the Federal Ministry of Education and Research (BMBF, Germany) within the &nbsp;<a href=\"https://www.denbi.de/\" rel=\"nofollow\">de.NBI</a> research network (grant number 031L0104A, W-de.NBI-016).</p>",
+    "access_right": "open",
+    "license": "BSD-2-Clause",
+    "keywords": [
+      "COPASI",
+      "Basico",
+      "Agent Skills",
+      "COPASI Skills"
+    ]
+  }

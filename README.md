@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/1430839836.svg)](https://doi.org/10.5281/zenodo.24196851)
+
 ## COPASI Skills
 
 This project hosts skills, to enable AI to run COPASI sensibly. The skills are written in an agnostic manner, so they will work with all AIs. As such it uses the [SKILL.md](https://skillmd.com/docs/format) format.
@@ -141,7 +143,7 @@ This project has been possible thanks to [LiBiS](https://libis.bioquant.uni-heid
 ![LiBiS Logo](./.graphics/libis-logo.svg)
 
 
-and to the BMBF funded [de.NBI](https://www.denbi.de) initiative (031L0104A, W-de.NBI-016)):
+and to the BMBF funded [de.NBI](https://www.denbi.de) initiative (031L0104A, W-de.NBI-016):
 
 ![de.NBI logo](./.graphics/deNBI_logo.jpg)
 
