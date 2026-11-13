@@ -130,6 +130,15 @@ On the first request, the agent runs `copasi-setup` to create `.venv`. Results a
 To call a skill explicitly, name it in the request, e.g. "use copasi-steadystate on `model.cps`".
 
 
+### Compiling the paper
+
+simply run: 
+
+```bash
+docker run --rm --volume "./paper:/data" --env JOURNAL=joss openjournals/inaragithub .
+```
+
+from the main folder
 
 
 ### License
